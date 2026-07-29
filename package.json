@@ -1,14 +1,10 @@
 {
-  "name": "studentsaver",
+  "name": "studentsaver-frontend",
   "version": "1.0.0",
-  "description": "Simplified StudentSaver Application - Glassmorphic Budgeting & Tracker",
-  "main": "backend/index.js",
+  "description": "StudentSaver Application - Glassmorphic Budgeting & Tracker Frontend",
+  "main": "index.html",
   "scripts": {
-    "install:all": "npm install && cd backend && npm install",
-    "db:generate": "cd backend && npx prisma generate",
-    "db:push": "cd backend && npx prisma db push",
-    "start": "node backend/index.js",
-    "dev": "node backend/index.js"
+    "start": "npx serve ."
   },
   "dependencies": {},
   "devDependencies": {}
