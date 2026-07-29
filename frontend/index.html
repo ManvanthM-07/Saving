@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StudentSaver — Next Era of Student Finance</title>
+  <meta name="description" content="Master your student budget in ₹, monitor daily safe spend, earn savings badges, and build wealth habits.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/style.css?v=4">
+</head>
+<body>
+
+  <!-- Toast Notification Container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="loading-overlay hidden">
+    <div class="spinner-wrap">
+      <div class="spinner"></div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       AUTH SCREEN — Premium Landing & Login (Ora Inspired)
+       ═══════════════════════════════════════════════════════════════ -->
+  <div id="auth-screen" class="auth-screen">
+    <!-- Background -->
+    <div class="mesh-bg">
+      <div class="mesh-orb mesh-orb-1"></div>
+      <div class="mesh-orb mesh-orb-2"></div>
+      <div class="mesh-orb mesh-orb-3"></div>
+      <div class="cursor-glow" id="cursor-glow"></div>
+      <div class="mesh-grid"></div>
+      <!-- Large Floating 3D Gold Coin -->
+      <div class="bg-floating-coin">
+        <div class="bg-coin-inner">₹</div>
+      </div>
+    </div>
+    <div class="noise-overlay"></div>
+
+    <!-- Minimal Header -->
+    <header class="landing-header">
+      <div class="brand">
+        <div class="logo-mark">₹</div>
+        <span class="logo-name">StudentSaver</span>
+      </div>
+    </header>
+
+    <!-- Clean Split Layout -->
+    <div class="auth-container">
+
+      <!-- Left — Hero -->
+      <div class="auth-hero">
+        <h1 class="auth-title">
+          <span>Track.</span>
+          <span>Save.</span>
+          <span class="text-lime">Grow.</span>
+        </h1>
+        <p class="auth-desc">Your student budget, simplified. Know exactly how much you can spend each day.</p>
+
+        <!-- Single Showcase Card -->
+        <div class="cards-showcase" id="cards-showcase">
+          <div class="stacked-card card-back" id="card-annual">
+            <div class="card-content">
+              <span class="card-tag">SAVINGS RATE</span>
+              <span class="card-num">+32%</span>
+            </div>
+          </div>
+          <div class="stacked-card card-front" id="card-daily">
+            <div class="card-header-mini">
+              <span class="chip-icon"></span>
+              <span class="card-brand">StudentSaver</span>
+            </div>
+            <div class="card-body-mini">
+              <span class="card-label-mini">DAILY SAFE SPEND</span>
+              <span class="card-val-mini" id="front-card-val">₹ 450.00</span>
+            </div>
+            <div class="card-footer-mini">
+              <span>ACTIVE TRACKING</span>
+              <span class="status-dot"></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right — Auth Card -->
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button type="button" class="auth-tab active" id="tab-login">Log In</button>
+          <button type="button" class="auth-tab" id="tab-register">Sign Up</button>
+        </div>
+
+        <div class="auth-card-header">
+          <h2 id="auth-main-title">Welcome Back</h2>
+          <p id="auth-subtitle">Enter your credentials to continue.</p>
+        </div>
+
+        <!-- Login Form -->
+        <form id="login-form" class="auth-form">
+          <div class="form-group">
+            <label for="login-email">Email</label>
+            <input type="email" id="login-email" class="input-field" required placeholder="you@university.ac.in">
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <div class="password-input-wrap">
+              <input type="password" id="login-password" class="input-field" required placeholder="••••••••">
+              <button type="button" class="password-toggle" id="toggle-login-pass" title="Toggle Password Visibility">
+                <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <span>Log In</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+
+          <button type="button" id="btn-demo-login" class="btn btn-secondary btn-block btn-demo-glow">
+            <span>⚡ Try Demo</span>
+          </button>
+        </form>
+
+        <!-- Register Form -->
+        <form id="register-form" class="auth-form hidden">
+          <div class="form-group">
+            <label for="register-name">Full Name</label>
+            <input type="text" id="register-name" class="input-field" required placeholder="Aarav Sharma">
+          </div>
+          <div class="form-group">
+            <label for="register-email">Email</label>
+            <input type="email" id="register-email" class="input-field" required placeholder="you@university.ac.in">
+          </div>
+          <div class="form-group">
+            <label for="register-password">Password</label>
+            <div class="password-input-wrap">
+              <input type="password" id="register-password" class="input-field" required placeholder="At least 8 characters">
+              <button type="button" class="password-toggle" id="toggle-reg-pass" title="Toggle Password Visibility">
+                <svg class="eye-open" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                <svg class="eye-closed hidden" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9.88 9.88a3 3 0 1 0 4.24 4.24"/><path d="M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68"/><path d="M6.61 6.61A13.52 13.52 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61"/><line x1="2" y1="2" x2="22" y2="22"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">
+            <span>Create Account</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+
+          <button type="button" id="btn-demo-register" class="btn btn-secondary btn-block btn-demo-glow">
+            <span>⚡ Try Demo</span>
+          </button>
+        </form>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════════════════════════
+       MAIN APP SCREEN
+       ═══════════════════════════════════════════════════════════════ -->
+  <div id="app-screen" class="app-screen hidden">
+    <!-- App Luminous Mesh Background -->
+    <div class="app-mesh-bg">
+      <div class="mesh-orb mesh-orb-1"></div>
+      <div class="mesh-orb mesh-orb-2"></div>
+      <div class="mesh-grid"></div>
+    </div>
+    <div class="noise-overlay"></div>
+
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo-mark logo-mark-sm">₹</div>
+        <span class="logo-name">StudentSaver</span>
+      </div>
+
+      <nav class="nav-menu">
+        <a href="#" class="nav-item active" data-target="dashboard-section">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="nav-item" data-target="expenses-section">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          <span>Expenses</span>
+        </a>
+        <a href="#" class="nav-item" data-target="analytics-section">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="m18.7 8-5.1 5.2-2.8-2.7L7 14.3"/></svg>
+          <span>Analytics</span>
+        </a>
+        <a href="#" class="nav-item" data-target="achievements-section">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+          <span>Achievements</span>
+        </a>
+        <a href="#" class="nav-item" data-target="notifications-section">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+          <span>Notifications</span>
+        </a>
+        <a href="#" class="nav-item" data-target="profile-section">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          <span>Profile & Budget</span>
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="user-badge">
+          <div class="avatar" id="nav-avatar">U</div>
+          <div class="user-info">
+            <span class="user-name" id="nav-username">Student</span>
+            <span class="user-streak" id="nav-streak">🔥 0 streak</span>
+          </div>
+        </div>
+        <button id="logout-btn" class="logout-btn" title="Log Out">
+          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+      <header class="content-header">
+        <h1 id="page-title">Dashboard</h1>
+        <button id="quick-add-btn" class="btn btn-primary">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          <span>Add Expense</span>
+        </button>
+      </header>
+
+      <!-- ═══ Dashboard Section ═══ -->
+      <section id="dashboard-section" class="content-section">
+        <!-- HERO — Daily Safe Spend Card -->
+        <div class="hero-card glass-card-3d">
+          <div class="hero-glow"></div>
+          <div class="hero-inner">
+            <div class="hero-top">
+              <div class="hero-label">DAILY SAFE SPEND</div>
+              <span class="status-badge" id="budget-track-status">ON TRACK</span>
+            </div>
+            <div class="hero-amount">
+              <span class="hero-rupee">₹</span><span class="hero-number" id="safe-spend-val">0.00</span>
+            </div>
+            <p class="hero-sub">Amount you can safely spend today to stay on target.</p>
+            <div class="hero-divider"></div>
+            <div class="hero-stats">
+              <div class="hero-stat">
+                <span class="hero-stat-label">DAYS LEFT</span>
+                <span class="hero-stat-val" id="days-remaining-val">0 days</span>
+              </div>
+              <div class="hero-stat">
+                <span class="hero-stat-label">REMAINING BUDGET</span>
+                <span class="hero-stat-val" id="remaining-budget-val">₹0.00</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Metric Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card glass-card-3d">
+            <div class="metric-accent accent-lime"></div>
+            <span class="metric-label">Monthly Income</span>
+            <span class="metric-value" id="income-val">₹0.00</span>
+          </div>
+          <div class="metric-card glass-card-3d">
+            <div class="metric-accent accent-amber"></div>
+            <span class="metric-label">Savings Target</span>
+            <span class="metric-value" id="target-val">₹0.00</span>
+          </div>
+          <div class="metric-card glass-card-3d">
+            <div class="metric-accent accent-emerald"></div>
+            <span class="metric-label">Current Savings</span>
+            <span class="metric-value" id="current-savings-val">₹0.00</span>
+          </div>
+          <div class="metric-card glass-card-3d">
+            <div class="metric-accent accent-red"></div>
+            <span class="metric-label">Total Expenses</span>
+            <span class="metric-value" id="total-expenses-val">₹0.00</span>
+          </div>
+        </div>
+
+        <!-- Progress -->
+        <div class="progress-card glass-card-3d">
+          <div class="progress-top">
+            <h4>Savings Goal Progress</h4>
+            <span class="progress-pct" id="progress-percentage">0%</span>
+          </div>
+          <div class="progress-track">
+            <div id="savings-progress-bar" class="progress-fill" style="width: 0%"></div>
+          </div>
+          <p class="progress-desc" id="progress-desc">Add income & expenses to see progress.</p>
+        </div>
+
+        <!-- Transactions & Notifications -->
+        <div class="two-col">
+          <div class="panel glass-card-3d">
+            <div class="panel-head">
+              <h3>Recent Transactions</h3>
+              <a href="#" id="view-all-expenses">View All →</a>
+            </div>
+            <div id="recent-expenses-list" class="transaction-list">
+              <div class="empty-state">No transactions yet. Add your first expense!</div>
+            </div>
+          </div>
+          <div class="panel glass-card-3d">
+            <div class="panel-head">
+              <div class="panel-title-group">
+                <h3>Notifications & Activity</h3>
+                <span class="notification-badge-count" id="notif-count">0</span>
+              </div>
+              <button type="button" id="clear-notifications-btn" class="btn-clear-notifs">Clear Log</button>
+            </div>
+            <div id="notification-list" class="notification-list">
+              <div class="empty-state">No recent notifications. You are on track!</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ Notifications Section ═══ -->
+      <section id="notifications-section" class="content-section hidden">
+        <div class="panel glass-card-3d">
+          <div class="panel-head">
+            <div class="panel-title-group">
+              <h3>Notifications & Activity Log</h3>
+              <span class="notification-badge-count" id="notif-count-full">0</span>
+            </div>
+            <button type="button" id="clear-notifications-full-btn" class="btn btn-ghost">Clear All Logs</button>
+          </div>
+          <div id="notification-list-full" class="notification-list-full">
+            <div class="empty-state">No notifications recorded.</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ Expenses Section ═══ -->
+      <section id="expenses-section" class="content-section hidden">
+        <div class="panel glass-card-3d">
+          <div class="panel-head flex-wrap">
+            <h3>Expense Log</h3>
+            <div class="filter-bar">
+              <select id="expense-filter-category" class="input-field">
+                <option value="">All Categories</option>
+                <option value="FOOD_SNACKS">Food & Snacks</option>
+                <option value="TRANSPORT">Transport</option>
+                <option value="STATIONERY">Stationery</option>
+                <option value="MOVIES_ENTERTAINMENT">Movies & Entertainment</option>
+                <option value="SHOPPING">Shopping</option>
+                <option value="OTHER">Other</option>
+              </select>
+              <input type="month" id="expense-filter-month" class="input-field">
+              <button id="reset-filters-btn" class="btn btn-ghost">Reset</button>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Category</th>
+                  <th>Description</th>
+                  <th>Amount</th>
+                  <th class="text-right">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="expenses-table-body">
+                <tr><td colspan="5" class="text-center">Loading expenses...</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="pagination" id="expenses-pagination"></div>
+        </div>
+      </section>
+
+      <!-- ═══ Analytics Section ═══ -->
+      <section id="analytics-section" class="content-section hidden">
+        <div class="two-col">
+          <div class="panel glass-card-3d">
+            <div class="panel-head"><h3>Spending by Category</h3></div>
+            <div id="category-bars-list" class="category-bars-list">
+              <div class="empty-state">No expense data to analyze yet.</div>
+            </div>
+          </div>
+          <div class="panel glass-card-3d">
+            <div class="panel-head"><h3>Monthly Saving History</h3></div>
+            <div class="analytics-trend-list" id="analytics-trend-list">
+              <div class="empty-state">No historical savings summaries available.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ Achievements Section ═══ -->
+      <section id="achievements-section" class="content-section hidden">
+        <div class="streak-card glass-card-3d">
+          <div class="streak-glow"></div>
+          <div class="streak-content">
+            <span class="fire-icon">🔥</span>
+            <div>
+              <h2 class="streak-val" id="achievement-streak-val">0 Months</h2>
+              <p>Current Saving Streak</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="badges-grid" id="badges-grid">
+          <div class="badge-card glass-card-3d locked" id="badge-FIRST_GOAL_COMPLETED">
+            <div class="badge-icon">🎯</div>
+            <h4>First Savings Met</h4>
+            <p>Successfully met your savings goal for your first month.</p>
+          </div>
+          <div class="badge-card glass-card-3d locked" id="badge-SAVED_5000">
+            <div class="badge-icon">💰</div>
+            <h4>Saver Novice</h4>
+            <p>Saved a cumulative total of ₹5,000.</p>
+          </div>
+          <div class="badge-card glass-card-3d locked" id="badge-SAVED_10000">
+            <div class="badge-icon">👑</div>
+            <h4>Saver Elite</h4>
+            <p>Saved a cumulative total of ₹10,000.</p>
+          </div>
+          <div class="badge-card glass-card-3d locked" id="badge-STREAK_3_MONTHS">
+            <div class="badge-icon">⚡</div>
+            <h4>Consistent Saver</h4>
+            <p>3 month savings streak.</p>
+          </div>
+          <div class="badge-card glass-card-3d locked" id="badge-STREAK_6_MONTHS">
+            <div class="badge-icon">✨</div>
+            <h4>Savings Master</h4>
+            <p>6 month savings streak.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- ═══ Profile Section ═══ -->
+      <section id="profile-section" class="content-section hidden">
+        <div class="panel glass-card-3d" style="max-width: 560px;">
+          <div class="panel-head"><h3>Budget & Income Settings</h3></div>
+          <form id="profile-form">
+            <div class="form-group">
+              <label for="profile-name">Full Name</label>
+              <input type="text" id="profile-name" class="input-field" required>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="profile-income">Monthly Income (₹)</label>
+                <input type="number" id="profile-income" class="input-field" min="0" step="10" required>
+              </div>
+              <div class="form-group">
+                <label for="profile-savings-goal">Savings Target (₹)</label>
+                <input type="number" id="profile-savings-goal" class="input-field" min="0" step="10" required>
+                <p class="input-hint">Spendable = Income − Savings Target</p>
+              </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="margin-top: 28px;">Save Settings</button>
+          </form>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <!-- Expense Modal -->
+  <div id="expense-modal" class="modal-overlay hidden">
+    <div class="modal glass-card-3d">
+      <div class="modal-head">
+        <h3 id="expense-modal-title">Add Expense</h3>
+        <button id="close-expense-modal-btn" class="modal-x">&times;</button>
+      </div>
+      <form id="expense-form">
+        <input type="hidden" id="expense-id">
+        <div class="form-group">
+          <label for="expense-amount">Amount (₹)</label>
+          <input type="number" id="expense-amount" class="input-field" step="0.01" min="0.01" required placeholder="0.00">
+        </div>
+        <div class="form-group">
+          <label for="expense-category">Category</label>
+          <select id="expense-category" required class="input-field">
+            <option value="FOOD_SNACKS">Food & Snacks</option>
+            <option value="TRANSPORT">Transport</option>
+            <option value="STATIONERY">Stationery</option>
+            <option value="MOVIES_ENTERTAINMENT">Movies & Entertainment</option>
+            <option value="SHOPPING">Shopping</option>
+            <option value="OTHER">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="expense-description">Description</label>
+          <input type="text" id="expense-description" class="input-field" placeholder="What was this for?">
+        </div>
+        <div class="form-group">
+          <label for="expense-date">Date</label>
+          <input type="date" id="expense-date" class="input-field" required>
+        </div>
+        <div class="modal-actions">
+          <button type="button" id="cancel-expense-btn" class="btn btn-ghost">Cancel</button>
+          <button type="submit" class="btn btn-primary">Save Expense</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="/js/api.js"></script>
+  <script src="/js/app.js"></script>
+</body>
+</html>
