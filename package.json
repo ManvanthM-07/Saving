@@ -4,7 +4,8 @@
   "description": "StudentSaver Application - Glassmorphic Budgeting & Tracker Frontend",
   "main": "index.html",
   "scripts": {
-    "start": "npx serve ."
+    "start": "npx -y serve .",
+    "dev": "npx -y serve ."
   },
   "dependencies": {},
   "devDependencies": {}

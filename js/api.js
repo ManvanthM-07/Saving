@@ -1,4 +1,14 @@
-const API_BASE = 'https://saving-backend-hrer.onrender.com/api';
+const isLocalhost = Boolean(
+  window.location.hostname === 'localhost' ||
+  window.location.hostname === '127.0.0.1' ||
+  window.location.hostname === '[::1]' ||
+  window.location.hostname === ''
+);
+
+const API_BASE = isLocalhost 
+  ? 'http://localhost:3001/api' 
+  : 'https://saving-backend-hrer.onrender.com/api';
+
 
 class ApiClient {
   constructor() {

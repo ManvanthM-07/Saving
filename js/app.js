@@ -25,6 +25,17 @@ document.addEventListener('DOMContentLoaded', () => {
   const expenseCategorySelect = document.getElementById('expense-category');
   const expenseDescriptionInput = document.getElementById('expense-description');
   const expenseDateInput = document.getElementById('expense-date');
+
+  // Exceeded Target Options Modal & Banner Elements
+  const exceededModal = document.getElementById('exceeded-target-modal');
+  const closeExceededModalBtn = document.getElementById('close-exceeded-modal-btn');
+  const cancelExceededBtn = document.getElementById('cancel-exceeded-btn');
+  const exceededOptionsForm = document.getElementById('exceeded-options-form');
+  const optionCardWeek = document.getElementById('option-card-week');
+  const optionCardNextMonth = document.getElementById('option-card-nextmonth');
+  const btnManageExceededPlan = document.getElementById('btn-manage-exceeded-plan');
+  const btnSettleLoss = document.getElementById('btn-settle-loss');
+  const exceededRecoveryBanner = document.getElementById('exceeded-recovery-banner');
   
   // Buttons
   const logoutBtn = document.getElementById('logout-btn');
@@ -423,8 +434,8 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('days-remaining-val').textContent = `${budgetEngine.daysRemaining} days`;
       document.getElementById('remaining-budget-val').textContent = formatCurrency(budgetEngine.remainingBudget);
 
-      // Status Badge Styling
-      safeSpendBadge.className = 'badge';
+      // Status Badge Styling & Exceeded Recovery Handling
+      safeSpendBadge.className = 'status-badge';
       if (budgetEngine.totalExpenses <= budgetEngine.warning80) {
         safeSpendBadge.textContent = 'ON TRACK';
         safeSpendBadge.classList.add('success');
@@ -435,6 +446,9 @@ document.addEventListener('DOMContentLoaded', () => {
         safeSpendBadge.textContent = 'EXCEEDED';
         safeSpendBadge.classList.add('danger');
       }
+
+      // Handle Exceeded Target Recovery (Prompt & Options)
+      handleExceededTargetLogic(summary);
 
       // Update Savings Progress
       const savingsProgress = summary.savingsProgress;
@@ -456,8 +470,9 @@ document.addEventListener('DOMContentLoaded', () => {
         progressDesc.style.color = 'var(--text-muted)';
       }
 
-      // Recent Transactions
+      // Recent Transactions & Spending Breakdown
       renderRecentTransactions(summary.recentTransactions);
+      renderDashCategoryBreakdown(summary.categoryBreakdown);
 
       // Notifications
       renderNotifications(data.notifications);
@@ -468,6 +483,223 @@ document.addEventListener('DOMContentLoaded', () => {
     } catch (err) {
       showToast('Error loading dashboard data', 'error');
     }
+  }
+
+  function renderDashCategoryBreakdown(categories) {
+    const list = document.getElementById('dash-category-bars-list');
+    if (!list) return;
+    list.innerHTML = '';
+
+    if (!categories || categories.length === 0 || categories.every(c => c.amount === 0)) {
+      list.innerHTML = '<div class="empty-state">No expense breakdown yet. Add your first expense!</div>';
+      return;
+    }
+
+    const sorted = [...categories].sort((a, b) => b.amount - a.amount);
+    sorted.forEach(c => {
+      if (c.amount > 0) {
+        const item = document.createElement('div');
+        item.className = 'chart-bar-item';
+        item.innerHTML = `
+          <div class="chart-bar-meta">
+            <span class="chart-bar-label">${formatCategoryName(c.category)}</span>
+            <span class="chart-bar-value">₹${c.amount.toFixed(2)} (${Math.round(c.percentage)}%)</span>
+          </div>
+          <div class="chart-bar-bg">
+            <div class="chart-bar-fill tag-${c.category}" style="width: ${c.percentage}%"></div>
+          </div>
+        `;
+        list.appendChild(item);
+      }
+    });
+  }
+
+  const viewAnalyticsFromDash = document.getElementById('view-analytics-from-dash');
+  if (viewAnalyticsFromDash) {
+    viewAnalyticsFromDash.addEventListener('click', (e) => {
+      e.preventDefault();
+      switchSection('analytics-section');
+    });
+  }
+
+  // --- Exceeded Target Management Logic & Event Handlers ---
+  let currentExceededDeficit = 0;
+
+  function handleExceededTargetLogic(summary) {
+    const budgetEngine = summary.budgetEngine;
+    const spendableBudget = budgetEngine.spendableBudget;
+    const totalExpenses = budgetEngine.totalExpenses;
+    const deficit = totalExpenses - spendableBudget;
+    const safeSpendBadge = document.getElementById('budget-track-status');
+    const now = new Date();
+    const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+    if (deficit > 0 && summary.monthlySavingsGoal > 0) {
+      currentExceededDeficit = deficit;
+      const lossAmount = deficit;
+      
+      // Update modal copy with real loss values
+      const modalLossEl = document.getElementById('exceeded-modal-loss-amount');
+      const optWeekLoss = document.getElementById('opt-week-loss');
+      const optNextCurrent = document.getElementById('opt-nextmonth-current');
+      const optNextNew = document.getElementById('opt-nextmonth-new');
+      const settleAmtVal = document.getElementById('settle-amt-val');
+
+      if (modalLossEl) modalLossEl.textContent = formatCurrency(lossAmount);
+      if (optWeekLoss) optWeekLoss.textContent = formatCurrency(lossAmount);
+      if (optNextCurrent) optNextCurrent.textContent = formatCurrency(summary.monthlySavingsGoal);
+      if (optNextNew) optNextNew.textContent = formatCurrency(summary.monthlySavingsGoal + lossAmount);
+      if (settleAmtVal) settleAmtVal.textContent = lossAmount.toFixed(2);
+
+      // Check stored user resolution
+      let userResolution = localStorage.getItem(`exceeded_resolution_${monthKey}`) || summary.goalStatus;
+
+      if (userResolution === 'PAY_WITHIN_WEEK' || userResolution === 'GRACE_PERIOD') {
+        safeSpendBadge.textContent = 'GRACE PERIOD (7 DAYS)';
+        safeSpendBadge.className = 'status-badge warning';
+        
+        if (exceededRecoveryBanner) exceededRecoveryBanner.classList.remove('hidden');
+        document.getElementById('exceeded-banner-emoji').textContent = '⏳';
+        document.getElementById('exceeded-banner-title').textContent = 'Pay Within 1 Week — Grace Period Active';
+        document.getElementById('exceeded-banner-desc').textContent = `You have 7 days to cover the remaining loss of ${formatCurrency(lossAmount)}. Settle it within a week to protect your goal & streak!`;
+        if (btnSettleLoss) btnSettleLoss.classList.remove('hidden');
+      } else if (userResolution === 'ADD_TO_NEXT_MONTH' || userResolution === 'ROLLED_OVER') {
+        safeSpendBadge.textContent = 'DEFICIT ROLLED OVER';
+        safeSpendBadge.className = 'status-badge warning';
+
+        if (exceededRecoveryBanner) exceededRecoveryBanner.classList.remove('hidden');
+        document.getElementById('exceeded-banner-emoji').textContent = '📈';
+        document.getElementById('exceeded-banner-title').textContent = 'Loss Added to Next Month Target';
+        document.getElementById('exceeded-banner-desc').textContent = `Remaining loss of ${formatCurrency(lossAmount)} will be added to next month's savings target (New Next Month Target: ${formatCurrency(summary.monthlySavingsGoal + lossAmount)}).`;
+        if (btnSettleLoss) btnSettleLoss.classList.add('hidden');
+      } else {
+        // Unresolved Exceeded
+        safeSpendBadge.textContent = 'EXCEEDED';
+        safeSpendBadge.className = 'status-badge danger';
+
+        if (exceededRecoveryBanner) exceededRecoveryBanner.classList.remove('hidden');
+        document.getElementById('exceeded-banner-emoji').textContent = '⚠️';
+        document.getElementById('exceeded-banner-title').textContent = 'Savings Target Exceeded!';
+        document.getElementById('exceeded-banner-desc').textContent = `Remaining loss of ${formatCurrency(lossAmount)} encroaches on your target. Choose your recovery plan now.`;
+        if (btnSettleLoss) btnSettleLoss.classList.add('hidden');
+
+        // Automatically trigger modal if not already opened/prompted for this deficit amount
+        const modalShownKey = `exceeded_modal_shown_${monthKey}_${Math.round(lossAmount)}`;
+        if (!localStorage.getItem(modalShownKey)) {
+          openExceededModal();
+          localStorage.setItem(modalShownKey, 'true');
+        }
+      }
+    } else {
+      currentExceededDeficit = 0;
+      if (exceededRecoveryBanner) exceededRecoveryBanner.classList.add('hidden');
+      if (btnSettleLoss) btnSettleLoss.classList.add('hidden');
+    }
+  }
+
+  function openExceededModal() {
+    if (exceededModal) exceededModal.classList.remove('hidden');
+  }
+
+  function closeExceededModal() {
+    if (exceededModal) exceededModal.classList.add('hidden');
+  }
+
+  // Option radio selection toggle
+  const optionRadios = document.querySelectorAll('input[name="exceeded_action"]');
+  const optionCards = document.querySelectorAll('.exceeded-option-card');
+
+  optionCards.forEach(card => {
+    card.addEventListener('click', (e) => {
+      const radio = card.querySelector('input[name="exceeded_action"]');
+      if (radio) {
+        radio.checked = true;
+        optionCards.forEach(c => c.classList.remove('selected'));
+        card.classList.add('selected');
+      }
+    });
+  });
+
+  if (closeExceededModalBtn) closeExceededModalBtn.addEventListener('click', closeExceededModal);
+  if (cancelExceededBtn) cancelExceededBtn.addEventListener('click', closeExceededModal);
+  if (btnManageExceededPlan) btnManageExceededPlan.addEventListener('click', openExceededModal);
+
+  function renderNotifications(notifications) {
+    if (Array.isArray(notifications) && notifications.length > 0) {
+      notifications.forEach(n => {
+        const timeStr = n.createdAt ? new Date(n.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : 'Now';
+        const msg = `${n.title ? n.title + ': ' : ''}${n.message}`;
+        const exists = notificationLog.some(existing => existing.message === msg);
+        if (!exists) {
+          notificationLog.push({ id: n.id || Date.now(), message: msg, type: 'info', icon: '🔔', time: timeStr });
+        }
+      });
+    }
+    renderNotificationLog();
+  }
+
+  if (exceededOptionsForm) {
+    exceededOptionsForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      showLoader(true);
+
+      const selectedOption = document.querySelector('input[name="exceeded_action"]:checked')?.value || 'PAY_WITHIN_WEEK';
+      const now = new Date();
+      const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+      try {
+        try {
+          await window.api.post('/monthlySummary/resolve-exceeded', { resolution: selectedOption, month: monthKey });
+        } catch (apiErr) {
+          // graceful fallback for demo mode
+        }
+
+        localStorage.setItem(`exceeded_resolution_${monthKey}`, selectedOption);
+
+        if (selectedOption === 'PAY_WITHIN_WEEK') {
+          showToast('7-day grace period activated! Pay within a week to protect your streak.', 'success');
+          addNotificationToLog(`Activated 7-day grace period for loss of ${formatCurrency(currentExceededDeficit)}`, 'warning', '⏳');
+        } else {
+          showToast('Deficit will be added to next month\'s savings target!', 'success');
+          addNotificationToLog(`Loss of ${formatCurrency(currentExceededDeficit)} added to next month target`, 'info', '📈');
+        }
+
+        closeExceededModal();
+        loadDashboardData();
+      } catch (err) {
+        showToast('Failed to update option', 'error');
+      } finally {
+        showLoader(false);
+      }
+    });
+  }
+
+  if (btnSettleLoss) {
+    btnSettleLoss.addEventListener('click', async () => {
+      if (confirm(`Do you want to settle/pay back the loss of ${formatCurrency(currentExceededDeficit)} now?`)) {
+        showLoader(true);
+        const now = new Date();
+        const monthKey = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+
+        try {
+          try {
+            await window.api.post('/monthlySummary/settle-loss', { month: monthKey });
+          } catch (e) {}
+
+          localStorage.removeItem(`exceeded_resolution_${monthKey}`);
+          localStorage.removeItem(`exceeded_modal_shown_${monthKey}_${Math.round(currentExceededDeficit)}`);
+
+          showToast('Deficit settled successfully! Savings target restored.', 'success');
+          addNotificationToLog(`Settled deficit of ${formatCurrency(currentExceededDeficit)}!`, 'success', '✨');
+
+          loadDashboardData();
+        } catch (err) {
+          showToast('Error settling loss', 'error');
+        } finally {
+          showLoader(false);
+        }
+      }
+    });
   }
 
   function renderRecentTransactions(transactions) {

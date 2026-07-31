@@ -257,6 +257,21 @@
           </div>
         </div>
 
+        <!-- Exceeded Target Recovery Banner (Hidden by default) -->
+        <div id="exceeded-recovery-banner" class="exceeded-banner hidden">
+          <div class="exceeded-banner-left">
+            <div class="exceeded-banner-icon" id="exceeded-banner-emoji">⚠️</div>
+            <div class="exceeded-banner-info">
+              <h4 id="exceeded-banner-title">Savings Target Exceeded</h4>
+              <p id="exceeded-banner-desc">Loading target status...</p>
+            </div>
+          </div>
+          <div class="exceeded-banner-actions">
+            <button type="button" id="btn-settle-loss" class="btn-settle-loss hidden">⚡ Settle Loss (₹<span id="settle-amt-val">0</span>)</button>
+            <button type="button" id="btn-manage-exceeded-plan" class="btn-change-plan">⚙️ Manage Options</button>
+          </div>
+        </div>
+
         <!-- Metric Cards -->
         <div class="metrics-grid">
           <div class="metric-card glass-card-3d">
@@ -293,7 +308,7 @@
           <p class="progress-desc" id="progress-desc">Add income & expenses to see progress.</p>
         </div>
 
-        <!-- Transactions & Notifications -->
+        <!-- Transactions & Spending Breakdown -->
         <div class="two-col">
           <div class="panel glass-card-3d">
             <div class="panel-head">
@@ -306,14 +321,11 @@
           </div>
           <div class="panel glass-card-3d">
             <div class="panel-head">
-              <div class="panel-title-group">
-                <h3>Notifications & Activity</h3>
-                <span class="notification-badge-count" id="notif-count">0</span>
-              </div>
-              <button type="button" id="clear-notifications-btn" class="btn-clear-notifs">Clear Log</button>
+              <h3>Spending Breakdown</h3>
+              <a href="#" id="view-analytics-from-dash">Analytics →</a>
             </div>
-            <div id="notification-list" class="notification-list">
-              <div class="empty-state">No recent notifications. You are on track!</div>
+            <div id="dash-category-bars-list" class="chart-bars-list">
+              <div class="empty-state">No expense breakdown yet.</div>
             </div>
           </div>
         </div>
@@ -496,6 +508,58 @@
         <div class="modal-actions">
           <button type="button" id="cancel-expense-btn" class="btn btn-ghost">Cancel</button>
           <button type="submit" class="btn btn-primary">Save Expense</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Exceeded Target Options Modal -->
+  <div id="exceeded-target-modal" class="modal-overlay hidden">
+    <div class="modal glass-card-3d exceeded-modal-card">
+      <div class="modal-head">
+        <h3>Savings Target Exceeded!</h3>
+        <button id="close-exceeded-modal-btn" class="modal-x">&times;</button>
+      </div>
+
+      <div class="exceeded-alert-box">
+        <div class="exceeded-alert-icon">⚠️</div>
+        <div class="exceeded-alert-content">
+          <h4>Target Limit Exceeded</h4>
+          <p>Your expenses have exceeded your spendable budget by <span class="exceeded-loss-amount" id="exceeded-modal-loss-amount">₹0.00</span>. How would you like to handle this remaining loss?</p>
+        </div>
+      </div>
+
+      <div class="options-group-title">Select Recovery Option</div>
+      <form id="exceeded-options-form">
+        <div class="exceeded-options-grid">
+          <!-- Option 1: Pay within a week -->
+          <label class="exceeded-option-card selected" id="option-card-week">
+            <input type="radio" name="exceeded_action" value="PAY_WITHIN_WEEK" class="exceeded-option-radio" checked>
+            <div class="exceeded-option-body">
+              <div class="exceeded-option-header">
+                <span class="exceeded-option-title">⏳ Pay within a week</span>
+                <span class="exceeded-option-badge badge-week">7-Day Grace</span>
+              </div>
+              <p class="exceeded-option-desc">Get a 7-day grace period to cover the loss of <strong id="opt-week-loss">₹0.00</strong>. Pay it back within a week to protect your savings goal and keep your monthly streak safe!</p>
+            </div>
+          </label>
+
+          <!-- Option 2: Add to next month target -->
+          <label class="exceeded-option-card" id="option-card-nextmonth">
+            <input type="radio" name="exceeded_action" value="ADD_TO_NEXT_MONTH" class="exceeded-option-radio">
+            <div class="exceeded-option-body">
+              <div class="exceeded-option-header">
+                <span class="exceeded-option-title">📈 Add to next month target</span>
+                <span class="exceeded-option-badge badge-nextmonth">Rollover Loss</span>
+              </div>
+              <p class="exceeded-option-desc">Roll over the deficit to next month. Your savings target for next month will increase from <span id="opt-nextmonth-current">₹0</span> to <strong id="opt-nextmonth-new">₹0</strong> to make up for the loss.</p>
+            </div>
+          </label>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" id="cancel-exceeded-btn" class="btn btn-ghost">Decide Later</button>
+          <button type="submit" class="btn btn-primary" style="background: linear-gradient(135deg, #ffd700 0%, #ffaa00 100%); color: #000; font-weight: 800;">Confirm Selection</button>
         </div>
       </form>
     </div>

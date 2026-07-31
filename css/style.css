@@ -1371,13 +1371,22 @@ select option:checked {
 .text-danger { color: var(--danger); }
 
 .notification-list { display: flex; flex-direction: column; gap: 4px; }
-.notification-item {
-  padding: 12px 14px;
+.notification-item, .notif-item {
+  padding: 10px 12px;
   border-radius: 12px;
-  border-left: 2px solid var(--lime);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 6px;
   transition: background 0.2s ease;
 }
-.notification-item:hover { background: rgba(255, 255, 255, 0.04); }
+.notification-item:hover, .notif-item:hover { background: rgba(255, 255, 255, 0.06); }
+.notif-icon { font-size: 18px; line-height: 1; flex-shrink: 0; }
+.notif-content { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+.notif-msg { font-size: 12.5px; font-weight: 600; color: var(--white-80, #e0e0e0); line-height: 1.35; }
+.notif-time { font-size: 10px; color: var(--white-40, rgba(255, 255, 255, 0.4)); }
 .notification-item h5 { font-size: 13px; font-weight: 700; }
 .notification-item p { font-size: 12px; color: var(--white-60); margin-top: 2px; }
 .notification-time { font-size: 10px; color: var(--white-30); display: block; margin-top: 4px; }
@@ -2174,5 +2183,234 @@ select option:checked {
     opacity: 0;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   EXCEEDED TARGET MODAL & RECOVERY BANNER
+   ═══════════════════════════════════════════════════════════════════════════ */
+.exceeded-modal-card {
+  max-width: 520px;
+}
+
+.exceeded-alert-box {
+  background: rgba(255, 77, 77, 0.1);
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  border-radius: var(--r);
+  padding: 16px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.exceeded-alert-icon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.exceeded-alert-content h4 {
+  font-size: 15px;
+  font-weight: 700;
+  color: #ff6b6b;
+  margin-bottom: 4px;
+}
+
+.exceeded-alert-content p {
+  font-size: 13px;
+  color: var(--white-70);
+  line-height: 1.4;
+}
+
+.exceeded-loss-amount {
+  font-weight: 800;
+  color: #ff6b6b;
+  font-size: 15px;
+}
+
+.options-group-title {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--white-50);
+  margin-bottom: 12px;
+}
+
+.exceeded-options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.exceeded-option-card {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding: 16px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1.5px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--r);
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.exceeded-option-card:hover {
+  background: rgba(255, 255, 255, 0.06);
+  border-color: rgba(255, 215, 0, 0.4);
+  transform: translateY(-2px);
+}
+
+.exceeded-option-card.selected {
+  background: rgba(255, 215, 0, 0.08);
+  border-color: #ffd700;
+  box-shadow: 0 0 20px rgba(255, 215, 0, 0.15);
+}
+
+.exceeded-option-radio {
+  margin-top: 4px;
+  accent-color: #ffd700;
+  width: 18px;
+  height: 18px;
+  cursor: pointer;
+}
+
+.exceeded-option-body {
+  flex: 1;
+}
+
+.exceeded-option-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.exceeded-option-title {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.exceeded-option-badge {
+  font-size: 10px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: var(--r-pill);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.badge-week {
+  background: rgba(255, 193, 7, 0.18);
+  color: #ffca28;
+  border: 1px solid rgba(255, 193, 7, 0.4);
+}
+
+.badge-nextmonth {
+  background: rgba(78, 205, 196, 0.18);
+  color: #4ecdc4;
+  border: 1px solid rgba(78, 205, 196, 0.4);
+}
+
+.exceeded-option-desc {
+  font-size: 12.5px;
+  color: var(--white-70);
+  line-height: 1.45;
+}
+
+/* Dashboard Exceeded Recovery Banner */
+.exceeded-banner {
+  background: linear-gradient(135deg, rgba(255, 165, 0, 0.12) 0%, rgba(255, 69, 0, 0.08) 100%);
+  border: 1px solid rgba(255, 165, 0, 0.35);
+  border-radius: var(--r-lg);
+  padding: 20px 24px;
+  margin-bottom: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  box-shadow: 0 8px 32px rgba(255, 140, 0, 0.1);
+  animation: fadeIn 0.3s ease;
+}
+
+.exceeded-banner-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.exceeded-banner-icon {
+  font-size: 32px;
+  line-height: 1;
+}
+
+.exceeded-banner-info h4 {
+  font-size: 16px;
+  font-weight: 800;
+  color: #ffa726;
+  margin-bottom: 4px;
+}
+
+.exceeded-banner-info p {
+  font-size: 13px;
+  color: var(--white-70);
+  margin: 0;
+}
+
+.exceeded-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+}
+
+.btn-settle-loss {
+  background: linear-gradient(135deg, #ffa726 0%, #fb8c00 100%);
+  color: #000;
+  font-weight: 800;
+  border: none;
+  padding: 10px 18px;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 13px;
+}
+
+.btn-settle-loss:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(251, 140, 0, 0.4);
+}
+
+.btn-change-plan {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--white);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 16px;
+  border-radius: var(--r-pill);
+  cursor: pointer;
+  font-size: 12.5px;
+  font-weight: 600;
+  transition: all 0.2s ease;
+}
+
+.btn-change-plan:hover {
+  background: rgba(255, 255, 255, 0.15);
+}
+
+@media (max-width: 768px) {
+  .exceeded-banner {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .exceeded-banner-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}
+
 
 
