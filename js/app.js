@@ -306,7 +306,7 @@ document.addEventListener('DOMContentLoaded', () => {
     showLoader(true);
     const demoEmail = 'demo@studentsaver.in';
     const demoPassword = 'Password123!';
-    const demoName = 'Demo Student';
+    const demoName = 'Aarav Sharma';
 
     try {
       const data = await window.api.post('/auth/login', { email: demoEmail, password: demoPassword });
@@ -322,7 +322,18 @@ document.addEventListener('DOMContentLoaded', () => {
         showToast('⚡ Demo Account created & logged in!', 'success');
         showAppScreen();
       } catch (regErr) {
-        showToast(regErr.message || 'Demo login failed', 'error');
+        // Fallback for offline demo mode
+        window.api.setToken('demo-mock-token');
+        currentUser = {
+          id: 'demo-user-1',
+          name: demoName,
+          email: demoEmail,
+          monthlyIncome: 15000,
+          monthlySavingsGoal: 5000,
+          savingStreak: 3
+        };
+        showToast('⚡ Logged in with Demo Mode!', 'success');
+        showAppScreen();
       }
     } finally {
       showLoader(false);

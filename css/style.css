@@ -1699,34 +1699,424 @@ select option:checked {
 .hidden { display: none !important; }
 .flex-wrap { flex-wrap: wrap; gap: 12px; }
 
-@media (max-width: 1100px) {
-  .auth-container { grid-template-columns: 1fr; gap: 40px; }
-  .auth-card { justify-self: center; max-width: 440px; }
+/* ═══════════════════════════════════════════════════════════════════════════
+   RESPONSIVE DESIGN & MOBILE VIEW SYSTEM (Desktop Unchanged)
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+/* Tablet & Smaller Screens (<= 1024px) */
+@media (max-width: 1024px) {
+  .auth-container {
+    grid-template-columns: 1fr;
+    gap: 32px;
+    max-width: 500px;
+  }
+  .auth-hero {
+    align-items: center;
+    text-align: center;
+  }
+  .hero-chip { align-self: center; }
+  .hero-feature-pills { justify-content: center; }
+  .auth-desc { text-align: center; }
+  .auth-card { justify-self: center; width: 100%; max-width: 440px; }
   .cards-showcase { display: none; }
-  .metrics-grid { grid-template-columns: repeat(2, 1fr); }
+  .bg-floating-coin {
+    width: 200px;
+    height: 200px;
+    opacity: 0.3;
+    top: 10%;
+    left: 85%;
+    transform: scale(0.65);
+  }
+  .metrics-grid { grid-template-columns: repeat(2, 1fr); gap: 16px; }
 }
 
+/* Mobile & Small Tablets (<= 768px) */
 @media (max-width: 768px) {
-  .auth-screen { padding: 24px 20px; }
-  .auth-title { font-size: 42px; }
-  .app-screen { flex-direction: column; }
-  .sidebar { width: 100%; position: relative; border-right: none; border-bottom: 1px solid rgba(255,255,255,0.06); padding: 16px; }
+  /* Auth Screen Mobile Layout */
+  .auth-screen {
+    padding: 20px 16px 36px;
+  }
+  .landing-header {
+    margin-bottom: 20px;
+  }
+  .logo-mark {
+    width: 36px;
+    height: 36px;
+    font-size: 18px;
+    border-radius: 10px;
+  }
+  .logo-name {
+    font-size: 18px;
+  }
+  .btn-demo-header {
+    padding: 6px 12px;
+    font-size: 11px;
+  }
+  .landing-badge { display: none; }
+  .auth-title {
+    font-size: clamp(34px, 8.5vw, 48px);
+    line-height: 1.05;
+  }
+  .auth-desc {
+    font-size: 14px;
+    line-height: 1.5;
+    margin-bottom: 4px;
+  }
+  .auth-card {
+    padding: 24px 18px;
+    border-radius: var(--r);
+  }
+  .auth-card-header h2 { font-size: 20px; }
+  .auth-tabs { margin-bottom: 16px; }
+  .input-field {
+    padding: 11px 14px;
+    font-size: 13px;
+    border-radius: 12px;
+  }
+
+  /* App Navigation & Mobile Header Bar */
+  .app-screen {
+    flex-direction: column;
+    min-height: 100vh;
+  }
+  .sidebar {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 12px 16px;
+    z-index: 100;
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    background: rgba(8, 8, 12, 0.95);
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
   .sidebar::after { display: none; }
-  .sidebar-header { margin-bottom: 16px; }
-  .nav-menu { flex-direction: row; overflow-x: auto; gap: 4px; }
-  .nav-item { white-space: nowrap; padding: 10px 14px; font-size: 13px; }
-  .sidebar-footer { display: none; }
-  .main-content { margin-left: 0; padding: 24px 16px; }
-  .two-col { grid-template-columns: 1fr; }
-  .content-header { flex-direction: column; gap: 12px; align-items: flex-start; }
-  .hero-number { font-size: 52px; }
-  .hero-rupee { font-size: 32px; }
-  .form-row { grid-template-columns: 1fr; }
+  
+  .sidebar-header {
+    grid-column: 1;
+    grid-row: 1;
+    margin-bottom: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  /* Show User Badge & Logout cleanly in Mobile Header Top Row */
+  .sidebar-footer {
+    grid-column: 2;
+    grid-row: 1;
+    display: flex;
+    padding-top: 0;
+    border-top: none;
+    margin-top: 0;
+    gap: 10px;
+    align-items: center;
+  }
+  .user-streak { display: none; }
+  .user-name {
+    font-size: 12px;
+    font-weight: 700;
+    max-width: 90px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .avatar {
+    width: 32px;
+    height: 32px;
+    font-size: 12px;
+    border-radius: 8px;
+  }
+  .logout-btn {
+    padding: 6px;
+  }
+
+  .nav-menu {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    gap: 6px;
+    width: 100%;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    scrollbar-width: none;
+  }
+  .nav-menu::-webkit-scrollbar { display: none; }
+
+  .nav-item {
+    white-space: nowrap;
+    padding: 8px 12px;
+    font-size: 12px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    gap: 6px;
+  }
+  .nav-item svg { width: 16px; height: 16px; }
+
+  /* Main Content Area */
+  .main-content {
+    margin-left: 0;
+    padding: 20px 16px 40px;
+    max-width: 100%;
+  }
+
+  .content-header {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 18px;
+  }
+  .content-header h1 {
+    font-size: 24px;
+    font-weight: 800;
+  }
+  #quick-add-btn {
+    padding: 9px 15px;
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Hero Card Mobile */
+  .hero-card {
+    margin-bottom: 16px;
+    border-radius: var(--r);
+  }
+  .hero-inner {
+    padding: 22px 18px 18px;
+  }
+  .hero-top {
+    margin-bottom: 12px;
+  }
+  .hero-amount {
+    margin-bottom: 6px;
+    display: flex;
+    align-items: baseline;
+    flex-wrap: wrap;
+  }
+  .hero-rupee {
+    font-size: clamp(26px, 6vw, 36px);
+    margin-right: 4px;
+  }
+  .hero-number {
+    font-size: clamp(36px, 9.5vw, 54px);
+  }
+  .hero-sub {
+    font-size: 12px;
+    margin-bottom: 16px;
+  }
+  .hero-stats {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 14px 24px;
+  }
+  .hero-stat-label { font-size: 9px; }
+  .hero-stat-val { font-size: 16px; }
+
+  /* Metric Cards & Progress */
+  .metrics-grid {
+    margin-bottom: 16px;
+    gap: 12px;
+  }
+  .metric-card {
+    padding: 14px 12px;
+    border-radius: var(--r-sm);
+    gap: 4px;
+  }
+  .metric-label { font-size: 11px; }
+  .metric-value { font-size: 18px; }
+
+  .progress-card {
+    padding: 16px 14px;
+    margin-bottom: 16px;
+    border-radius: var(--r-sm);
+  }
+  .progress-top h4 { font-size: 13px; }
+  .progress-pct { font-size: 15px; }
+
+  /* Two Column Layout & Panels */
+  .two-col {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .panel {
+    padding: 16px 14px;
+    border-radius: var(--r-sm);
+  }
+  .panel-head {
+    margin-bottom: 12px;
+    padding-bottom: 10px;
+  }
+  .panel-head h3 { font-size: 14px; }
+
+  /* Transactions & Notifications List */
+  .transaction-item {
+    padding: 10px 8px;
+    border-radius: 10px;
+    gap: 8px;
+  }
+  .transaction-meta {
+    gap: 8px;
+    min-width: 0;
+    overflow: hidden;
+  }
+  .transaction-details {
+    min-width: 0;
+    flex: 1;
+  }
+  .transaction-desc {
+    font-size: 12px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .transaction-cat { font-size: 10px; }
+  .transaction-amt {
+    font-size: 13px;
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  /* Expenses Log & Filter Bar */
+  .panel-head.flex-wrap {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .filter-bar {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .filter-bar select, .filter-bar input {
+    flex: 1 1 calc(50% - 4px);
+    min-width: 120px;
+    padding: 9px 12px;
+    font-size: 12px;
+    border-radius: 10px;
+  }
+  .filter-bar button {
+    flex: 1 1 100%;
+    padding: 8px 12px;
+  }
+
+  .table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .table {
+    min-width: 500px;
+  }
+  .table th {
+    padding: 10px 12px;
+    font-size: 9px;
+  }
+  .table td {
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+
+  /* Achievements & Analytics */
+  .streak-card {
+    border-radius: var(--r-sm);
+    margin-bottom: 16px;
+  }
+  .streak-content {
+    padding: 20px 16px;
+    gap: 14px;
+  }
+  .fire-icon { font-size: 32px; }
+  .streak-val { font-size: 26px; }
+
+  .badges-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 10px;
+  }
+  .badge-card {
+    padding: 16px 10px;
+    gap: 6px;
+    border-radius: var(--r-sm);
+  }
+  .badge-icon { font-size: 28px; }
+  .badge-card h4 { font-size: 12px; }
+  .badge-card p { font-size: 10px; }
+
+  /* Modal & Profile Settings */
+  .modal {
+    width: calc(100% - 24px);
+    max-width: 440px;
+    padding: 20px 16px;
+    max-height: 92vh;
+    overflow-y: auto;
+    border-radius: var(--r);
+  }
+  .modal-head { margin-bottom: 16px; }
+  .modal-head h3 { font-size: 17px; }
+
+  .form-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+    margin-top: 12px;
+  }
+
+  .toast-container {
+    top: 12px;
+    width: calc(100% - 24px);
+    max-width: 380px;
+  }
+  .toast {
+    padding: 9px 14px;
+    font-size: 12px;
+    border-radius: 14px;
+  }
 }
 
+/* Small Smartphone Screen Adjustments (<= 480px) */
 @media (max-width: 480px) {
-  .metrics-grid { grid-template-columns: 1fr; }
-  .badges-grid { grid-template-columns: 1fr; }
+  .auth-screen { padding: 16px 12px 28px; }
+  .auth-title { font-size: clamp(28px, 9.5vw, 38px); }
+  .auth-card { padding: 18px 14px; }
+  
+  .metrics-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .metric-card { padding: 12px 10px; }
+  .metric-value { font-size: 15px; }
+  .metric-label { font-size: 10px; }
+
+  .main-content { padding: 14px 10px 32px; }
+  .hero-inner { padding: 16px 12px; }
+  .hero-rupee { font-size: 24px; }
+  .hero-number { font-size: 34px; }
+  .hero-stats { gap: 10px 18px; }
+  .hero-stat-val { font-size: 14px; }
+
+  .badges-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .content-header { margin-bottom: 14px; }
+  .content-header h1 { font-size: 20px; }
+  #quick-add-btn { padding: 8px 12px; font-size: 11px; }
 }
 
 ::selection { background: rgba(217, 255, 74, 0.25); }
